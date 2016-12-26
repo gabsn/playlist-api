@@ -11,3 +11,5 @@ type Song struct {
 }
 
 var playlist = make(map[string]Song)
+
+var id int = 0
