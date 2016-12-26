@@ -44,14 +44,13 @@ func PostSongHandler(w http.ResponseWriter, r *http.Request) {
 
 // HTTP PUT /api/songs/{id}
 func PutSongHandler(w http.ResponseWriter, r *http.Request) {
-	vars := mux.Vars(r)
-	k := vars["id"]
-    println("Key: ", k)
 	var songToUpdate Song
 	err := json.NewDecoder(r.Body).Decode(&songToUpdate)
 	if err != nil {
 		panic(err)
 	}
+	vars := mux.Vars(r)
+	k := vars["id"]
 	if song, ok := playlist[k]; ok {
 		songToUpdate.AddedOn = song.AddedOn
 		delete(playlist, k)
