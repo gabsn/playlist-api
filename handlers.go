@@ -62,4 +62,13 @@ func PutSongHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 // HTTP DELETE /api/songs/{id}
-func DeleteSongHandler(w http.ResponseWriter, r *http.Request) {}
+func DeleteSongHandler(w http.ResponseWriter, r *http.Request) {
+    vars := mux.Vars(r)
+	k := vars["id"]
+	if _, ok := playlist[k]; ok {
+		delete(playlist, k)
+	} else {
+		fmt.Fprintf(w, "No key %s to delete", k)
+	}
+	w.WriteHeader(http.StatusNoContent)
+}
