@@ -6,18 +6,23 @@ import (
 	"time"
 )
 
+func WriteToJSON(w http.ResponseWriter, object interface{}, status int) {
+    w.Header().Set("Content-Type", "apllication/json")
+	j, err := json.Marshal(object)
+	if err != nil {
+		panic(err)
+	}
+    w.WriteHeader(status)
+	w.Write(j)
+}
+
 // HTTP GET /api/songs
 func GetSongHandler(w http.ResponseWriter, r *http.Request) {
 	var songs []Song
 	for _, v := range playlist {
 		songs = append(songs, v)
 	}
-	w.Header().Set("Content-Type", "apllication/json")
-	j, err := json.Marshal(songs)
-	if err != nil {
-		panic(err)
-	}
-	w.Write(j)
+    WriteToJSON(w, songs, http.StatusOK)
 }
 
 // HTTP POST /api/songs
@@ -30,6 +35,7 @@ func PostSongHandler(w http.ResponseWriter, r *http.Request) {
 	song.AddedOn = time.Now()
 	k := song.AddedOn.String()
 	playlist[k] = song
+    WriteToJSON(w, song, http.StatusCreated)
 }
 
 // HTTP PUT /api/songs/{id}
